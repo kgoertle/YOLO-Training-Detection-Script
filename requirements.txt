@@ -1,0 +1,5 @@
+REM Install GPU-enabled PyTorch and torchvision (CUDA 11.7)
+pip install --no-cache-dir https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp310-cp310-win_amd64.whl https://download.pytorch.org/whl/cu117/torchvision-0.14.1%2Bcu117-cp310-cp310-win_amd64.whl
+
+REM Install remaining dependencies for YOLO and utilities
+pip install --no-cache-dir ultralytics==8.0.20 opencv-python==4.7.0.72 matplotlib==3.6.3 pillow==10.0.1 seaborn==0.12.2 pandas==1.5.3 scipy==1.10.0 psutil==5.9.4 tqdm==4.64.1
