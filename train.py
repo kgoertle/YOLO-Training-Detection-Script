@@ -4,6 +4,7 @@ import sys
 import os
 from pathlib import Path
 from datetime import datetime
+import torch
 from ultralytics import YOLO
 import csv
 import json
@@ -14,7 +15,7 @@ import requests
 # Directory configuration
 # --------------
 
-BASE_DIR = Path(os.getenv("YOLO_BASE_DIR", r"C:\Users\TheGo\Documents\YOLO"))
+BASE_DIR = Path(os.getenv("YOLO_BASE_DIR", str(Path.home() / "Documents" / "YOLO")))
 DATA_YAML = BASE_DIR / "data.yaml"
 YOLO_WEIGHTS_PATH = BASE_DIR / "yolo8n.pt"
 YOLO_YAML_PATH = BASE_DIR / "models" / "yolov8.yaml"
@@ -323,6 +324,16 @@ def train_yolo_model(train_type="auto", checkpoint_path=None):
     project_path = runs_root
     log_path = logs_root / run_name
 
+    # -- automatically uses appropriate GPU for OS
+
+    if torch.backends.mps.is_available():
+        device = "mps" 
+    elif torch.cuda.is_available():
+        device = "cuda" 
+    else:
+        device = "cpu"
+    print(f"[INFO] Using device: {device}")
+
     # ------------------------
     # Model Preferences
     # ------------------------
@@ -342,13 +353,13 @@ def train_yolo_model(train_type="auto", checkpoint_path=None):
         epochs=epochs,
         half=True,
         imgsz=imgsz,
-        batch=12,
-        workers=6,
+        batch=4,
+        workers=4,
         project=str(runs_root),
         name=run_name,
         exist_ok=False,
         pretrained=not reset_weights,
-        device=0,
+        device=device,
         augment=True,
         mosaic=True,
         mixup=True,
