@@ -1,6 +1,6 @@
-path: C:\Users\TheGo\Documents\YOLO\data
-train: C:\Users\TheGo\Documents\YOLO\data\train\images
-val: C:\Users\TheGo\Documents\YOLO\data\validation\images
+path: /Users/kgoertle/Documents/YOLO/data
+train: /Users/kgoertle/Documents/YOLO/data/train/images
+val: /Users/kgoertle/Documents/YOLO/data/validation/images
 nc: 7
 names:
 - F
