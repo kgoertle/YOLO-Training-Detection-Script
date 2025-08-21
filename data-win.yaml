@@ -1,0 +1,12 @@
+path: C:\Users\TheGo\Documents\YOLO\data
+train: C:\Users\TheGo\Documents\YOLO\data\train\images
+val: C:\Users\TheGo\Documents\YOLO\data\validation\images
+nc: 7
+names:
+- F
+- Feeder
+- M
+- Main_Perch
+- Nesting_Box
+- Sky_Perch
+- Wooden_Perch
