@@ -129,9 +129,9 @@ def main():
     args = parser.parse_args()
 
     mode = (
-        "transfer-learning training" if args.train else
-        "updating training weights" if args.auto_train else
-        "for scratch training"
+        "Transfer Learning" if args.train else
+        "Updating" if args.auto_train else
+        "Scratch"
     )
 
     checkpoint = None
