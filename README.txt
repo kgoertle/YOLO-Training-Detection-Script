@@ -5,12 +5,12 @@ Training Script Functionalities:
 	  or the model backbone (yolo11.yaml) for training from scratch (--scratch-train).
 	  
 	- Accessible model updating feature (--auto-train) that looks for the most recent
-	  best.pt file and only updates with previously trained weights with new training data.
+	  best.pt file & only updates with previously trained weights with new training data.
 	  
 	- Organized output structure based on timestamps and training type.
 	
 	- Inclusion of a log folder that includes a summary text document, the full
-	  results.csv, and a metadata.json file for tracking model updates.
+	  results.csv, & a metadata.json file for tracking model updates.
 	  (...\logs\(runs / test-runs)\train (mm-dd-yyyy hh-mm-ss)
 	  
 	- Catered toward small object detection models.
@@ -25,30 +25,17 @@ Training Script Functionalities:
 Training Arguments:
 --------------------
 
-## To run the validation split script:
-python train_val_split.py
+To update the most recently generated best.pt file:
+python train.py --update
 
-## To update the most recently generated best.pt file:
-python train_start.py --auto-train
+To run fresh training taking advantage of transfer learning:
+python train.py --train
 
-## To run fresh training taking advantage of transfer learning:
-python train_start.py --train
+To run training completely from scratch:
+python train.py --scratch
 
-## To run training completely from scratch:
-python train_start.py --scratch-train
-
--------------------------
-Test Training Arguments:
--------------------------
-
-## To test an update to the most recently generated best.pt file:
-python train_start.py --test-auto-train
-
-## To run a test that trains fresh taking advantage of transfer learning:
-python train_start.py --test-train
-
-## To run a test that trains completely from scratch:
-python train_start.py --test-scratch-train
+Add "--test" to run test mode. 
+Runs training at lower specifications & works in a different output directory.
 
 ================================
 Detection Script Functionality:
@@ -57,20 +44,17 @@ Detection Script Functionality:
 	- Allows for either standard detections (--detect), or option for testing (--test-detect).
 		This automatically looks for the best.pt file in the appropriate runs / test-runs folder.
 	  
-	- Multiple source input compatibility. USB and PI cameras are supported, along with video input.
+	- Multiple source input compatibility. USB & PI cameras are supported, along with video input.
 		Output recordings of processed sources are in associated model logs folder. 
 		They are recorded as a timestamp from when the detection first began. (mm-dd-yyyy hh-mm-ss)
 		(...\logs\(test-runs / runs)\train (timestamp)\recordings\(usb / picamera / video-input)
 	
 	- Supports running multiple cameras of either type alongside video input. (--sources picamera0 usb0 C:\path\to\video.type)
-		Independent windows for each source, each with their own FPS, object detection, and generic interaction conters.
-		Auto scales windows depending on number of sources, with a supported number of 4.
-		Windows are labeled accordingly and can also be adjusted manually like most other programs.
 	  
 	- Class-to-class interactions are recorded in a .csv.
-		Recorded as a timestamp from when the detection first began and ended. (mm-dd hh-mm-ss to mm-dd hh-mm-ss)
+		Recorded as a timestamp from when the detection first began & ended. (mm-dd hh-mm-ss to mm-dd hh-mm-ss)
 		Standard detections save a checkpoint every 1 hour, test detections every minute.
-		Records duration of the interaction (in s), how many frames it lasted, and the timestamp from when it began to when it ended.
+		Records duration of the interaction (in s), how many frames it lasted, & the timestamp from when it began to when it ended.
 		A 60 frame temporal buffer to count as an interaction for standard use. (~3 sec at 20 fps)
 			15 frame temporal buffer to count as an interaction for test use. (>1 sec at 20 fps)
 		(...\logs\(test-runs / runs)\train (timestamp)\interaction-metrics\(usb / picamera / video-input)
@@ -88,20 +72,17 @@ Detection Script Functionality:
 Detection Arguments:
 ---------------------
 
-## To run the detection script with preferred settings:
+To run the detection script with preferred settings:
 python detect.py --detect --lab --sources (picamera0, usb0, C:\path\to\video.type)
 
-## To run the detection script with Ultralytics default settings:
+To run the detection script with Ultralytics default settings:
 python detect.py --detect --sources (picamera0, usb0, C:\path\to\video.type)
 
-## To test the detection script with preferred settings:
-python detect.py --test-detect --lab --sources (picamera0, usb0, C:\path\to\video.type)
+Parse "--test-detect" instead to use test training weights and directories.
 
 -----------------
 Setup Arguments:
 -----------------
-conda activate yolo-env
-cd C:\Users\TheGo\Documents\YOLO
 
 ultralytics>=8.0.100
 torch>=1.13.0
