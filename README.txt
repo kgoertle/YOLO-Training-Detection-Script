@@ -1,8 +1,8 @@
 =================================
 Training Script Functionalities:
 =================================
-	- Automatically aquires the most recent YOLO nano model (yolo11n.pt) to retreive pre-trained weights for transfer learning (--train), 
-	  or the model backbone (yolo11.yaml) for training from scratch (--scratch-train).
+	- Automatically aquires the most recent YOLO nano model (yolov8n.pt) to retreive pre-trained weights for transfer learning (--train), 
+	  or the model backbone (yolov8.yaml) for training from scratch (--scratch-train).
 	  
 	- Accessible model updating feature (--auto-train) that looks for the most recent
 	  best.pt file & only updates with previously trained weights with new training data.
@@ -93,3 +93,4 @@ tqdm>=4.64.0
 opencv-python>=4.7.0
 matplotlib>=3.7.0
 pandas>=1.5.0
+
