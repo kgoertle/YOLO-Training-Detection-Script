@@ -36,14 +36,14 @@ def train_yolo(mode="train", checkpoint=None, test=False):
 
     prev_meta = load_latest_metadata(logs_root)
     new_imgs = 0
-    if mode == "auto-train" and prev_meta:
+    if mode == "update" and prev_meta:
         if total_imgs <= prev_meta.get("total_images_used", 0):
             print("[INFO] No new images detected. Skipping training.")
             return
         new_imgs = total_imgs - prev_meta.get("total_images_used", 0)
         print(f"[INFO] {new_imgs} new images detected. Proceeding.")
 
-    if mode == "scratch-train":
+    if mode == "scratch":
         if input("[WARN] Scratch training. Proceed? (Y/N): ").strip().lower() != "y":
             print("[INFO] Scratch training cancelled.")
             return
@@ -51,12 +51,12 @@ def train_yolo(mode="train", checkpoint=None, test=False):
         if not test: epochs = 150
 
     # Determine weights
-    if mode == "auto-train":
+    if mode == "update":
         weights_path = get_latest_checkpoint(runs_root, prefer_last=False)
         if not weights_path:
             print("[WARN] No best.pt found. Falling back to default YOLO weights.")
             weights_path = ensure_weights(YOLO_WEIGHTS)
-        resume_flag = False  # auto-train always starts from best.pt, not resuming last.pt
+        resume_flag = False  # update always starts from best.pt, not resuming last.pt
     else:
         weights_path = checkpoint if checkpoint else (None if reset_weights else ensure_weights(YOLO_WEIGHTS))
         resume_flag = bool(checkpoint)
@@ -122,15 +122,15 @@ def main():
     parser = argparse.ArgumentParser(description="YOLO Training Script")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--train", action="store_true")
-    group.add_argument("--auto-train", action="store_true")
-    group.add_argument("--scratch-train", action="store_true")
+    group.add_argument("--update", action="store_true")
+    group.add_argument("--scratch", action="store_true")
     parser.add_argument("--test", action="store_true")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
     mode = (
         "Transfer Learning" if args.train else
-        "Updating" if args.auto_train else
+        "Updating" if args.update else
         "Scratch"
     )
 
