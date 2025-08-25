@@ -1,11 +1,31 @@
-torch==1.13.1
-torchvision==0.14.1
-numpy==1.23.0
-Pillow==10.0.1
-tqdm==4.64.1
-opencv-python-headless==4.7.0.72
-matplotlib==3.6.3
-pandas==1.5.3
-ultralytics==8.0.100
-wandb
+# Core ML & YOLO
+torch==2.0.1          
+torchvision==0.15.2  
+ultralytics==8.3.100   
 
+# Numeric & Data
+numpy==1.26.3              
+pandas==2.0.3              
+
+# Image Processing
+opencv-python-headless==4.7.0.72  
+
+# Visualization
+matplotlib==3.7.2
+seaborn==0.13.2
+
+# Utilities
+pillow==10.0.1
+tqdm==4.67.1
+requests==2.32.5
+psutil==7.0.0
+pydantic==2.11.7
+pyyaml==6.0.2
+six==1.17.0
+typing_extensions==4.14.1
+
+# W&B integration
+wandb==0.21.1
+
+# Optional, for advanced ops like THOP / FLOPs calculation
+thop==0.1.1.post2209072238
