@@ -37,6 +37,8 @@ python train.py --scratch
 Add "--test" to run test mode. 
 Runs training at lower specifications & works in a different output directory.
 
+Add "--tflite" to enable output formatting.
+
 ================================
 Detection Script Functionality:
 ================================
@@ -84,13 +86,33 @@ Parse "--test-detect" instead to use test training weights and directories.
 Setup Arguments:
 -----------------
 
-ultralytics>=8.0.100
-torch>=1.13.0
-torchvision>=0.14.0
+Python 3.10
+
+# Core libraries
+torch>=2.8.0
+torchvision>=0.23.0
 numpy>=1.23.0
-Pillow>=9.4.0
-tqdm>=4.64.0
-opencv-python>=4.7.0
-matplotlib>=3.7.0
-pandas>=1.5.0
+opencv-python-headless>=4.7.0
+Pillow>=10.0.1
+matplotlib>=3.6.3
+pandas>=1.5.3
+pyyaml>=6.0.0
+tqdm>=4.64.1
+
+# Ultralytics
+ultralytics==8.3.184
+ultralytics-thop>=2.0.16
+wandb>=0.21.1
+
+# Libraries for Raspberry Pi
+tensorflow>=2.19.0
+tf_keras>=2.19.0
+onnx>=1.17.0,<1.18.0
+onnxruntime>=1.22.0
+onnx2tf>=1.28.2
+onnx_graphsurgeon>=0.5.8
+onnxslim>=0.1.65
+ai-edge-litert>=1.3.0,<1.4.0
+sng4onnx>=1.0.4
+
 
