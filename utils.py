@@ -1,12 +1,12 @@
 import requests, json, csv, os
 from pathlib import Path
 from datetime import datetime
+from typing import Optional 
 
 # ------------------
 # Download & ensure files
-# Download a file from 'url' to 'dest_path'.
 # ------------------
-def download_file(url: str, dest_path: Path) -> Path | None:
+def download_file(url: str, dest_path: Path) -> Optional[Path]:
     dest_path.parent.mkdir(parents=True, exist_ok=True)
     try:
         r = requests.get(url, stream=True)
@@ -20,46 +20,23 @@ def download_file(url: str, dest_path: Path) -> Path | None:
         print(f"[ERROR] Failed downloading {url}: {e}")
         return None
 
-# Ensure YOLO .yaml file exists; download if missing.
-def ensure_yolo_yaml(yolo_yaml_path: Path) -> Path | None:
+def ensure_yolo_yaml(yolo_yaml_path: Path) -> Optional[Path]:
     if yolo_yaml_path.exists(): 
         return yolo_yaml_path
     return download_file(
-        "https://raw.githubusercontent.com/ultralytics/ultralytics/main/ultralytics/cfg/models/v8/yolov8.yaml",
+        "https://raw.githubusercontent.com/ultralytics/ultralytics/main/ultralytics/cfg/models/11/yolo11.yaml",
         yolo_yaml_path
     )
 
-# Ensures YOLO weights file exists; download if missing.
-def ensure_weights(yolo_weights_path: Path) -> Path | None:
+def ensure_weights(yolo_weights_path: Path) -> Optional[Path]:
     if yolo_weights_path.exists(): 
         return yolo_weights_path
     return download_file(
-        "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt",
+        "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt",
         yolo_weights_path
     )
 
-# ------------------
-# Checkpoints & metadata
-# Get the latest checkpoint in `base_dir/runs/log_folder`.
-# If prefer_last=True, looks for last.pt first (for --resume); else best.pt (for --update).
-# ------------------
-
-def get_latest_checkpoint(base_dir: Path, log_folder="runs", prefer_last=False) -> str | None:
-    folder = base_dir / "runs" / log_folder
-    latest, path = 0, None
-    if not folder.exists(): return None
-    for run in folder.iterdir():
-        if not run.is_dir(): continue
-        for pt_name in (["last.pt","best.pt"] if prefer_last else ["best.pt","last.pt"]):
-            candidate = run / "weights" / pt_name
-            if candidate.exists():
-                mtime = candidate.stat().st_mtime
-                if mtime > latest:
-                    latest, path = mtime, candidate
-    if path: print(f"[INFO] Found checkpoint: {path}")
-    return str(path) if path else None
-
-def load_latest_metadata(logs_root: Path) -> dict | None:
+def load_latest_metadata(logs_root: Path) -> Optional[dict]:
     """Return latest metadata.json from logs_root."""
     if not logs_root.exists(): return None
     latest, meta = 0, None
@@ -76,7 +53,6 @@ def load_latest_metadata(logs_root: Path) -> dict | None:
 
 # ------------------
 # Results & reporting
-# Parse YOLO results.csv for final metrics.
 # ------------------
 def parse_results(run_dir: Path) -> dict:
     csv_path = run_dir / "results.csv"
@@ -104,7 +80,6 @@ def parse_results(run_dir: Path) -> dict:
             return {}
 
 def save_quick_summary(log_dir: Path, mode: str, epochs: int, metrics: dict, new_imgs=0, total_imgs=0):
-    """Save quick-summary.txt with metrics and image counts."""
     log_dir.mkdir(parents=True, exist_ok=True)
     path = log_dir / "quick-summary.txt"
     with open(path, "w") as f:
@@ -120,7 +95,6 @@ def save_quick_summary(log_dir: Path, mode: str, epochs: int, metrics: dict, new
     print(f"[INFO] Quick summary saved to {path}")
 
 def save_metadata(log_dir: Path, mode: str, epochs: int, new_imgs: int, total_imgs: int):
-    """Save metadata.json with training info."""
     log_dir.mkdir(parents=True, exist_ok=True)
     meta = {
         "timestamp": datetime.now().isoformat(),
@@ -135,7 +109,6 @@ def save_metadata(log_dir: Path, mode: str, epochs: int, new_imgs: int, total_im
 
 # ------------------
 # Misc utilities
-# Count image files in folder recursively.
 # ------------------
 def count_images(folder: Path) -> int:
     if not folder.exists(): return 0
